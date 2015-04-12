@@ -28,6 +28,5 @@
     "neo4j": "^2.0.0-RC1",
     "request": "^2.55.0",
     "streamline": "^0.12.1",
-    "underscore": "^1.8.3"
   }
 }

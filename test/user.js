@@ -9,7 +9,7 @@ function expectUser(obj, user) {
   expect(obj).to.be.an.instanceOf(User);
 
   if (user) {
-    _.each(['id', 'name'], function (prop) {
+    ['id', 'name'].forEach(function (prop) {
         expect(obj[prop]).to.equal(user[prop]);
     });
   }
