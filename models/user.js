@@ -29,7 +29,7 @@ User.create = function (data, callback) {
 	});
 };
 
-User.createSpatialIndex = function (data, callback) {
+User.createSpatialIndex = function (data, _) {
   data = {
     "name" : data["name"] || "user",
     "config" : {
@@ -44,7 +44,5 @@ User.createSpatialIndex = function (data, callback) {
     url: app.get('NEO4J_URL') + '/db/data/index/node/',
     method: 'POST',
     json: data
-  }, function(error, response, body) {
-    callback(error, response, body);
-  });
+  }, _);
 };
