@@ -4,18 +4,12 @@ var expect = require('chai').expect;
 var User = require('../models/user');
 
 // Helpers:
-
-/**
- * Asserts that the given object is a valid user model.
- * If an expected user model is given too (the second argument),
- * asserts that the given object represents the same user with the same data.
- */
 function expectUser(obj, user) {
   expect(obj).to.be.an('object');
   expect(obj).to.be.an.instanceOf(User);
 
   if (user) {
-    ['id', 'name'].forEach(function (prop) {
+    _.each(['id', 'name'], function (prop) {
         expect(obj[prop]).to.equal(user[prop]);
     });
   }
@@ -24,11 +18,18 @@ function expectUser(obj, user) {
 describe('User', function () {
   it('creates a user', function (next) {
     User.create({name: 'Ari'}, function (err, user) {
-      if (err) return next(err);
-
       expectUser(user);
       expect(user.id).to.be.a('number');
       expect(user.name).to.be.equal('Ari');
+
+      return next();
+    });
+  });
+
+  it('creates a spatial index', function (next) {
+    User.createSpatialIndex({}, function (error, response, body) {
+      expect(body["provider"]).to.be.equal('spatial');
+      expect(body["geometry_type"]).to.be.equal('point');
 
       return next();
     });
