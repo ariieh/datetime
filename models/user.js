@@ -1,9 +1,7 @@
+var app = require('../app')
 var neo4j = require('neo4j');
-var db = new neo4j.GraphDatabase(
-    process.env['NEO4J_URL'] ||
-    process.env['GRAPHENEDB_URL'] ||
-    'http://localhost:7474'
-);
+var db = new neo4j.GraphDatabase(app.get('NEO4J_URL'));
+var request = require('request');
 
 var User = module.exports = function User(node) {
     this.node = node;
@@ -29,4 +27,8 @@ User.create = function (data, callback) {
         var user = new User(results[0]['user']);
         callback(null, user);
 	});
+};
+
+User.createSpatialIndex = function (data, callback) {
+
 };
