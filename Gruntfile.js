@@ -3,16 +3,16 @@ module.exports = function(grunt) {
   grunt.initConfig({
     shell: {
       startNeo4j: {
-        command: 'db/neo4j-community-2.2.0/bin/neo4j start'
+        command: 'neo4j-community-2.2.0/bin/neo4j start'
       },
       stopNeo4j: {
-        command: 'db/neo4j-community-2.2.0/bin/neo4j stop'
+        command: 'neo4j-community-2.2.0/bin/neo4j stop'
       },
       restartNeo4j: {
-        command: 'db/neo4j-community-2.2.0/bin/neo4j restart'
+        command: 'neo4j-community-2.2.0/bin/neo4j restart'
       },
       clearDB: {
-        command: 'rm -rf db/neo4j-community-2.2.0/data/graph.db/'
+        command: 'rm -rf neo4j-community-2.2.0/data/graph.db/'
       }
     }
   });
