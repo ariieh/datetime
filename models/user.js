@@ -1,3 +1,4 @@
+// Model setup
 var app = require('../app')
 var request = require('request');
 var neo4j = require('neo4j');
@@ -7,13 +8,18 @@ var User = module.exports = function User(node) {
     this.node = node;
 }
 
-Object.defineProperty(User.prototype, 'id', {
-	get: function() { return this.node._id; }
+// Define accessible node properties and ID
+var nodeProperties = ['name', 'lat', 'lon'];
+
+nodeProperties.forEach(function(nodeProperty) {
+  Object.defineProperty(User.prototype, nodeProperty, {
+    get: function () { return this.node.properties[nodeProperty]; },
+    set: function (name) { this.node.properties[nodeProperty] = nodeProperty; }
+  });
 });
 
-Object.defineProperty(User.prototype, 'name', {
-  get: function () { return this.node.properties['name']; },
-  set: function (name) { this.node.properties['name'] = name; }
+Object.defineProperty(User.prototype, 'id', {
+  get: function() { return this.node._id; }
 });
 
 User.create = function (data, callback) {
