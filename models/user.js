@@ -22,16 +22,17 @@ Object.defineProperty(User.prototype, 'id', {
   get: function() { return this.node._id; }
 });
 
+// User class functions
 User.create = function (data, callback) {
 	db.cypher({
 	  query: 'CREATE (user:User {data}) RETURN user',
 	  params: {
       data: data
     }
-	}, function (err, results) {
-	    if (err) throw err;
-      var user = new User(results[0]['user']);
-      callback(null, user);
+	}, function (error, results) {
+      var user;
+	    if (!error) user = new User(results[0]['user']);
+      if (callback) callback(error, user);
 	});
 };
 
