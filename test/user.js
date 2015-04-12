@@ -17,7 +17,7 @@ function expectUser(obj, user) {
 
 describe('User', function () {
   it('creates a user', function (next) {
-    User.create({name: 'Ari'}, function (err, user) {
+    User.create({name: 'Ari'}, function (error, user) {
       expectUser(user);
       expect(user.id).to.be.a('number');
       expect(user.name).to.be.equal('Ari');
@@ -33,5 +33,36 @@ describe('User', function () {
 
       return next();
     });
+  });
+
+  it('adds a node to the spatial index', function (next) {
+    var createUser = function(callback) {
+      User.create({
+        name: 'Ari',
+        lat: '36.985003',
+        lon: '-81.562500'
+      }, callback);
+    };
+
+    var createSpatialIndex = function(callback) {
+      User.createSpatialIndex({}, callback);
+    };
+
+    var addNodeToSpatialIndex = function(user, callback) {
+      User.addNodeToSpatialIndex(user.properties, callback);
+    };
+
+    var userAddedToSpatialIndex = function (error, response, body) {
+      var body = JSON.parse(body);
+      expect(body["metadata"]).to.be.an('object');
+      expect(body["data"]).to.be.an('object');
+      expect(body["outgoing_relationships"]).to.be.a('string');
+
+      return next();
+    }
+
+    createSpatialIndex(createUser(function(error, user){
+      addNodeToSpatialIndex(user.node.properties, userAddedToSpatialIndex);
+    }));
   });
 });

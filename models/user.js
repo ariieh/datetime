@@ -56,4 +56,12 @@ User.createSpatialIndex = function (data, callback) {
   });
 };
 
+User.addNodeToSpatialIndex = function(properties, callback) {
+  request({
+    url: app.get('NEO4J_URL') + '/db/data/node/',
+    method: 'POST',
+    json: properties
+  }, function(error, response, body) {
+    if (callback) callback(error, response, body);
+  });
 };
