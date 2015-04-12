@@ -29,9 +29,9 @@ User.create = function (data, callback) {
 	});
 };
 
-User.createSpatialIndex = function (data, _) {
+User.createSpatialIndex = function (data, callback) {
   data = {
-    "name" : data["name"] || "user",
+    "name" : "user",
     "config" : {
       "provider" : data["provider"] || "spatial",
       "geometry_type" : data["geometry_type"] || "point",
@@ -44,5 +44,9 @@ User.createSpatialIndex = function (data, _) {
     url: app.get('NEO4J_URL') + '/db/data/index/node/',
     method: 'POST',
     json: data
-  }, _);
+  }, function(error, response, body) {
+    if (callback) callback(error, response, body);
+  });
+};
+
 };
