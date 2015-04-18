@@ -13,9 +13,10 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 if ('development' == app.get('env')) app.use(errorHandler());
+app.set('view engine', 'jade');
 
 // Routes
-app.use(express.static(path.join(__dirname, 'public')));
+app.get('/', routes.views.home);
 
 // Start server
 app.listen(app.get('port'), function() {
