@@ -41,3 +41,7 @@ Thumbs.db
 ######################
 node_modules
 neo4j-community-2.2.0/
+
+# Environment variables #
+######################
+.env

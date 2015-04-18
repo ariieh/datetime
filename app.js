@@ -4,7 +4,7 @@ var routes = require('./routes');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var errorHandler = require('errorhandler');
-var path = require('path');
+var env = require('node-env-file');
 
 // Express config
 app.set('port', process.env.PORT || 3000);
@@ -14,6 +14,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 if ('development' == app.get('env')) app.use(errorHandler());
 app.set('view engine', 'jade');
+
+// Load local environment variables
+env(__dirname + '/.env');
 
 // Routes
 app.get('/', routes.views.home);
