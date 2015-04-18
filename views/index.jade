@@ -3,6 +3,7 @@ html
   head
   body
     include fb_login
+    include geolocation
     fb:login-button(scope="#{FB_PERMISSIONS}", onlogin="checkLoginState();")
     #status
 
