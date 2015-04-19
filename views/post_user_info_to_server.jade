@@ -1,0 +1,16 @@
+script(type='text/javascript').
+  function postUserInfoToServer(lat, lon, fbUser) {
+
+    $.ajax({
+      type: "POST",
+      url: "/users",
+      data: {
+        lat: lat,
+        lon: lon,
+        fbUser: fbUser
+      },
+      success: function(error, response, body) {
+
+      }
+    })
+  }

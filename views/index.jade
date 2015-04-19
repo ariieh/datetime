@@ -2,8 +2,9 @@ doctype html
 html
   head
   body
+    script(src='./jquery-2.1.3.js')
     include fb_login
     include geolocation
+    include post_user_info_to_server
     fb:login-button(scope="#{FB_PERMISSIONS}", onlogin="checkLoginState();")
     #status
-
