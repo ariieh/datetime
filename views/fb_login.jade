@@ -7,8 +7,7 @@ script(type='text/javascript').
           document.getElementById('status').innerHTML = 'Thanks for logging in, ' + response.name + '!';
           postUserInfoToServer(lat, lon, response);
         });
-      })
-      postUserInfoToServer();
+      });
     } else if (response.status === 'not_authorized') {
       document.getElementById('status').innerHTML = 'Please log ' +
         'into this app.';
@@ -19,9 +18,7 @@ script(type='text/javascript').
   }
 
   function checkLoginState() {
-    FB.getLoginStatus(function(response) {
-      statusChangeCallback(response);
-    });
+    FB.getLoginStatus(statusChangeCallback);
   }
 
   window.fbAsyncInit = function() {
@@ -31,9 +28,7 @@ script(type='text/javascript').
       version    : 'v2.3'
     });
 
-    FB.getLoginStatus(function(response) {
-      statusChangeCallback(response);
-    });
+    checkLoginState();
   };
 
   (function(d, s, id){
