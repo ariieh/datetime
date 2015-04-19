@@ -1,6 +1,5 @@
 var express = require('express');
 var app = module.exports = express();
-var routes = require('./routes');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var errorHandler = require('errorhandler');
@@ -19,7 +18,10 @@ app.set('view engine', 'jade');
 env(__dirname + '/.env');
 
 // Routes
+var routes = require('./routes');
 app.get('/', routes.views.home);
+app.post('/users', routes.users.create);
+app.use(express.static(__dirname + '/public'));
 
 // Start server
 app.listen(app.get('port'), function() {
