@@ -1,6 +1,6 @@
 // Model setup
 
-var app = require('../app')
+var app = require('../app');
 var request = require('request');
 var neo4j = require('neo4j');
 var db = new neo4j.GraphDatabase(app.get('NEO4J_URL'));

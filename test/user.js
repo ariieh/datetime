@@ -1,5 +1,3 @@
-// Cribbing a bit from: https://github.com/aseemk/node-neo4j-template/blob/master/test/models/user.js
-
 var expect = require('chai').expect;
 var User = require('../models/user');
 
