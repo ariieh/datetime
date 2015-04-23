@@ -11,6 +11,15 @@ var User = module.exports = function User(node) {
 
 // Define accessible node properties and ID
 
+function extractUsersFromResults (results) {
+  var users = [];
+  results.forEach(function (result) {
+    var user = new User(result["user"]["properties"]);
+    users.push(user);
+  });
+  return users;
+}
+
 var nodeProperties = ['name', 'lat', 'lon'];
 
 nodeProperties.forEach(function(nodeProperty) {
@@ -24,12 +33,21 @@ Object.defineProperty(User.prototype, 'id', {
   get: function() { return this.node._id; }
 });
 
-User.create = function(data, callback) {
+User.find = function (data, callback) {
+  hashString = app.get('helpers').hashToString(data);
+
+  db.cypher({
+    query: 'MATCH (user ' + hashString + ') RETURN user'
+  }, function (error, results) {
+      if (callback) callback(error, extractUsersFromResults(results));
+  });
+}
+
+User.create = function (data, callback) {
+  hashString = app.get('helpers').hashToString(data);
+
 	db.cypher({
-	  query: 'CREATE (user:User {data}) RETURN user',
-	  params: {
-      data: data
-    }
+	  query: 'MERGE (user:User ' + hashString + ') RETURN user',
 	}, function (error, results) {
       var user;
 	    if (!error) user = new User(results[0]['user']);
@@ -39,23 +57,18 @@ User.create = function(data, callback) {
 
 // Spatial stuff
 
-User.findByLocation = function(lat, lon, distance, callback) {
+User.findByLocation = function (lat, lon, distance, callback) {
   var lat = lat.toFixed(2);
   var lon = lon.toFixed(2);
   var distance = distance.toFixed(1);
 
   db.cypher({
-    query: 'START n = node:user({location}) return n',
+    query: 'START user = node:user({location}) return user',
     params: {
       location: "withinDistance:[" + lat + "," + lon + "," + distance + "]"
     }
   }, function (error, results) {
-      var users = [];
-      results.forEach(function (result) {
-        var user = new User(result["n"]["properties"]);
-        users.push(user);
-      });
-      if (callback) callback(error, users);
+      if (callback) callback(error, extractUsersFromResults(results));
   });
 }
 
@@ -95,11 +108,11 @@ User.createSimplePointLayer = function (callback) {
   });
 };
 
-User.addNodeToSpatialLayer = function(id, callback) {
+User.addNodeToSpatialLayer = function (id, callback) {
   var updateNodeIDForIndex = function (id) {
     // Necessary thanks to Neo4j: http://stackoverflow.com/a/24700885/4062306
     db.cypher({
-      query: 'START n = node(' + id + ') SET n.id = id(n)'
+      query: 'START user = node(' + id + ') SET user.id = id(user)'
     }, function (error, results) {
       if (callback) callback(error, results)
     });

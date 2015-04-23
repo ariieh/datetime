@@ -13,12 +13,13 @@ function expectUser(obj, user) {
   }
 }
 
-describe('Adding to a spatial index', function () {
-  var user_id, user_lat, user_lon, user_name;
+var user_id, user_lat, user_lon, user_name;
 
+describe('Creating a user', function () {
   it('creates a user', function (next) {
     var node = {
       name: 'Ari',
+      id: '12345',
       lat: 36.985003,
       lon: -81.562500
     }
@@ -38,6 +39,29 @@ describe('Adding to a spatial index', function () {
       return next();
     });
   });
+
+  it('merges duplicate users with existing IDs', function () {
+    var id = Math.floor((Math.random() * 1000000) + 1);
+    var node = {
+      name: 'Ari',
+      id: id,
+      lat: 36.985003,
+      lon: -81.562500
+    }
+
+    User.create(node, function (error, user) {
+      node["name"] = "Arieh";
+      User.create(node, function (error, user) {
+        User.find({id: id}, function (error, users) {
+          expect(users.length).to.be.equal(1);
+          return next();
+        });
+      });
+    });
+  });
+});
+
+describe('Adding to a spatial index', function () {
 
   it('creates a spatial point layer', function (next) {
     User.createSimplePointLayer(function (error, response, body) {
