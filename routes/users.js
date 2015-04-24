@@ -1,5 +1,13 @@
 var User = require('../models/user')
 
 exports.create = function(req, res, next) {
-  console.log(req["body"]);
+  var fbUser = req["body"]["fbUser"];
+  fbUser["lat"] = req["body"]["lat"];
+  fbUser["lon"] = req["body"]["lon"];
+  delete fbUser["education"];
+  delete fbUser["quotes"];
+
+  User.create(fbUser, function(error, user) {
+    console.log(error, user);
+  });
 }
