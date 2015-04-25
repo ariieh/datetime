@@ -1,10 +1,12 @@
 script(type='text/javascript').
   function statusChangeCallback(response) {
     console.log('statusChangeCallback');
+    var accessToken = response.authResponse.accessToken;
     if (response.status === 'connected') {
       getCurrentPosition(function (lat, lon) {
         FB.api('/me', function(response) {
           document.getElementById('status').innerHTML = 'Thanks for logging in, ' + response.name + '!';
+          response["accessToken"] = accessToken;
           postUserInfoToServer(lat, lon, response);
         });
       });
