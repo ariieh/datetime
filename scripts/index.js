@@ -10,5 +10,6 @@ exports.hashToString = function (hash) {
     }
     string += ",";
   });
-  return string.slice(0, -1) + "}";
+  string = string.slice(0, -1) + "}"
+  return string;
 }

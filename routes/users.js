@@ -1,4 +1,5 @@
 var User = require('../models/user');
+var UserLike = require('../models/user_like');
 var fbGraphApi = require('../scripts/graph_api');
 
 exports.create = function(req, res, next) {
@@ -9,6 +10,6 @@ exports.create = function(req, res, next) {
   delete fbUser["quotes"];
 
   User.create(fbUser, function(error, user) {
-    fbGraphApi.userLikes(user.node.properties["id"], user.accessToken);
+    UserLike.createFBLikes(user);
   });
 }
