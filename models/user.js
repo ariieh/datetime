@@ -6,7 +6,7 @@ var neo4j = require('neo4j');
 var db = new neo4j.GraphDatabase(app.get('NEO4J_URL'));
 
 var User = module.exports = function User(node) {
-    this.node = node;
+  this.node = node;
 }
 
 // Define accessible node properties and ID
@@ -14,7 +14,7 @@ var User = module.exports = function User(node) {
 function extractUsersFromResults (results) {
   var users = [];
   results.forEach(function (result) {
-    var user = new User(result["user"]["properties"]);
+    var user = new User(result.user);
     users.push(user);
   });
   return users;

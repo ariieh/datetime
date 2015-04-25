@@ -40,7 +40,7 @@ describe('Creating a user', function () {
     });
   });
 
-  it('merges duplicate users with existing IDs', function () {
+  it('merges duplicate users with existing IDs', function (next) {
     var id = Math.floor((Math.random() * 1000000) + 1);
     var node = {
       name: 'Ari',
@@ -50,7 +50,6 @@ describe('Creating a user', function () {
     }
 
     User.create(node, function (error, user) {
-      node["name"] = "Arieh";
       User.create(node, function (error, user) {
         User.find({id: id}, function (error, users) {
           expect(users.length).to.be.equal(1);
@@ -92,7 +91,7 @@ describe('Adding to a spatial index', function () {
         expect(user.lat).to.be.equal(user_lat);
         expect(user.lon).to.be.equal(user_lon);
       });
+      return next();
     });
-    return next();
   });
 });
