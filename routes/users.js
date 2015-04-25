@@ -10,6 +10,6 @@ exports.create = function(req, res, next) {
   delete fbUser["quotes"];
 
   User.create(fbUser, function(error, user) {
-    UserLike.createFBLikes(user);
+    UserLike.createFBLikesForUser(user);
   });
 }

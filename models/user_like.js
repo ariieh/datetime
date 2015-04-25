@@ -11,31 +11,34 @@ var UserLike = module.exports = function User(node) {
     this.node = node;
 }
 
-UserLike.createFBLikes = function (user, callback) {
+UserLike.createFBLikesForUser = function (user, callback) {
   var fbUserID = user.node.properties.id;
 
-  fbGraphApi.userLikes(fbUserID, user.accessToken, function (error, likes) {
-    var matchUser = "MATCH (user {id:'" + fbUserID + "'})\n";
-
-    var createUserLikes = likes.data.map(function (userLike) {
-      var data = {
-        category: userLike.category,
-        name: userLike.name,
-        id: userLike.id,
-        created_time: userLike.created_time
-      }
-      return "MERGE (like" + userLike.id + ":" + dbModelName + " " + app.get('helpers').hashToString(data) + ")";
-    }).join("\n");
-
-    var createUserRelationships = "CREATE " + likes.data.map(function (userLike) {
-      return "(user)-[:" + dbRelationshipName + "]->(like" + userLike.id + "),";
-    }).join("\n").slice(0, -1);
-
-    var query = matchUser + createUserLikes + createUserRelationships;
-
-    db.cypher({ query: query }, function (error, results) {
-      console.log(error, results);
-    });
+  fbGraphApi.userLikes(fbUserID, user.accessToken, function (error, results) {
+    UserLike.createLikes(fbUserID, results.data, callback);
   });
 }
 
+UserLike.createLikes = function(userID, likes, callback) {
+  var matchUser = "MATCH (user {id:'" + userID + "'})\n";
+
+  var createUserLikes = likes.map(function (userLike) {
+    var data = {
+      category: userLike.category,
+      name: userLike.name,
+      id: userLike.id,
+      created_time: userLike.created_time
+    }
+    return "MERGE (like" + userLike.id + ":" + dbModelName + " " + app.get('helpers').hashToString(data) + ")";
+  }).join("\n");
+
+  var createUserRelationships = "CREATE " + likes.map(function (userLike) {
+    return "(user)-[:" + dbRelationshipName + "]->(like" + userLike.id + "),";
+  }).join("\n").slice(0, -1);
+
+  var query = matchUser + createUserLikes + createUserRelationships;
+
+  db.cypher({ query: query }, function (error, results) {
+    if (callback) callback(error, results);
+  });
+};
