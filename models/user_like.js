@@ -20,7 +20,7 @@ UserLike.createFBLikesForUser = function (user, callback) {
 }
 
 UserLike.createLikes = function(userID, likes, callback) {
-  var matchUser = "MATCH (user {id:'" + userID + "'})\n";
+  var matchUser = "MATCH (user {id:" + userID + "})\n";
 
   var createUserLikes = likes.map(function (userLike) {
     var data = {
@@ -30,13 +30,21 @@ UserLike.createLikes = function(userID, likes, callback) {
       created_time: userLike.created_time
     }
     return "MERGE (like" + userLike.id + ":" + dbModelName + " " + app.get('helpers').hashToString(data) + ")";
-  }).join("\n");
+  }).join("\n") + "\n";
 
   var createUserRelationships = "CREATE " + likes.map(function (userLike) {
     return "(user)-[:" + dbRelationshipName + "]->(like" + userLike.id + "),";
   }).join("\n").slice(0, -1);
 
   var query = matchUser + createUserLikes + createUserRelationships;
+
+  db.cypher({ query: query }, function (error, results) {
+    if (callback) callback(error, results);
+  });
+};
+
+UserLike.findLikes = function(userID, callback) {
+  var query = "MATCH (u:User {id:" + userID + "}) - [:LIKES]-> l RETURN l;"
 
   db.cypher({ query: query }, function (error, results) {
     if (callback) callback(error, results);
