@@ -1,6 +1,9 @@
+var app = require('../app');
+
 exports.home = function(req, res, next) {
   res.render('index', {
     FB_APP_ID: process.env.FB_APP_ID,
+    FB_API_VERSION: app.get('FB_API_VERSION'),
     FB_PERMISSIONS: [
       "public_profile",
       "email",

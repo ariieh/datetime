@@ -20,7 +20,7 @@ function extractUsersFromResults (results) {
   return users;
 }
 
-var nodeProperties = ['name', 'lat', 'lon'];
+var nodeProperties = ['name', 'lat', 'lon', 'accessToken'];
 
 nodeProperties.forEach(function(nodeProperty) {
   Object.defineProperty(User.prototype, nodeProperty, {

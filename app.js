@@ -9,6 +9,7 @@ var helpers = require('./scripts');
 // Express config
 app.set('port', process.env.PORT || 3000);
 app.set('NEO4J_URL', process.env['NEO4J_URL'] || process.env['GRAPHENEDB_URL'] || 'http://localhost:7474');
+app.set('FB_API_VERSION', 'v2.3');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
