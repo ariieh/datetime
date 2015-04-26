@@ -55,6 +55,18 @@ User.create = function (data, callback) {
 	});
 };
 
+User.findOrCreate = function (data, callback) {
+  User.find(data, function (error, users) {
+    if (error) {
+      callback(error, []);
+    } else if (users.length > 0) {
+      callback(error, users[0]);
+    } else {
+      User.create(data, callback);
+    }
+  });
+}
+
 // Spatial stuff
 
 User.findByLocation = function (lat, lon, distance, callback) {

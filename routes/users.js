@@ -8,7 +8,7 @@ exports.create = function(req, res, next) {
   delete fbUser["education"];
   delete fbUser["quotes"];
 
-  User.create(fbUser, function(error, user) {
+  User.findOrCreate(fbUser, function(error, user) {
     // TODO: This needs to create or update.
     UserLike.createFBLikesForUser(user);
   });
