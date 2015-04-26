@@ -8,6 +8,10 @@ function auth (token) {
   return "?access_token=" + token;
 }
 
+// function auth (token) {
+//   return "?access_token=" + process.env.FB_APP_ID + "|" + process.env.FB_APP_SECRET;
+// }
+
 fbGraphAPI.userLikes = function (userID, accessToken, callback) {
   console.log(fbURL + fbApiVersion + '/' + userID + '/likes' + auth(accessToken));
   request({

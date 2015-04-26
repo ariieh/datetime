@@ -41,7 +41,7 @@ describe('Creating a user', function () {
   });
 
   it('merges duplicate users with existing IDs', function (next) {
-    var id = Math.floor((Math.random() * 1000000) + 1);
+    var id = String(Math.floor((Math.random() * 1000000) + 1));
     var node = {
       name: 'Ari',
       id: id,

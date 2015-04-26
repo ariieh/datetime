@@ -2,7 +2,7 @@ var app = require('../app');
 var request = require('request');
 var neo4j = require('neo4j');
 var db = new neo4j.GraphDatabase(app.get('NEO4J_URL'));
-var fbGraphApi = require('../scripts/graph_api');
+var fbGraphApi = require('../scripts/fb_graph_api');
 
 var dbModelName = "UserLike";
 var dbRelationshipName = "LIKES";
@@ -20,7 +20,8 @@ UserLike.createFBLikesForUser = function (user, callback) {
 }
 
 UserLike.createLikes = function(userID, likes, callback) {
-  var matchUser = "MATCH (user {id:" + userID + "})\n";
+  // TODO: What about people with no likes?
+  var matchUser = "MATCH (user {id:'" + userID + "'})\n";
 
   var createUserLikes = likes.map(function (userLike) {
     var data = {
@@ -44,7 +45,7 @@ UserLike.createLikes = function(userID, likes, callback) {
 };
 
 UserLike.findLikes = function(userID, callback) {
-  var query = "MATCH (u:User {id:" + userID + "}) - [:LIKES]-> l RETURN l;"
+  var query = "MATCH (u:User {id:'" + userID + "'}) - [:LIKES]-> l RETURN l;"
 
   db.cypher({ query: query }, function (error, results) {
     if (callback) callback(error, results);

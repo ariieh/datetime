@@ -32,7 +32,7 @@ describe('User likes', function () {
   var likes = [mochipet, manousheh, kamakura, therise];
 
   it('creates likes as nodes', function (next) {
-    var id = Math.floor((Math.random() * 1000000) + 1);
+    var id = String(Math.floor((Math.random() * 1000000) + 1));
     var node = {
       name: 'Ari',
       id: id
@@ -46,7 +46,6 @@ describe('User likes', function () {
         });
       });
     });
-
   });
 
 });
