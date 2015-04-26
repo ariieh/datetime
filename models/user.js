@@ -53,7 +53,7 @@ User.create = function (data, callback) {
 	    if (!error) user = new User(results[0]['user']);
       if (callback) callback(error, user);
 	});
-};
+}
 
 User.findOrCreate = function (data, callback) {
   User.find(data, function (error, users) {
@@ -61,6 +61,35 @@ User.findOrCreate = function (data, callback) {
       callback(error, []);
     } else if (users.length > 0) {
       callback(error, users[0]);
+    } else {
+      User.create(data, callback);
+    }
+  });
+}
+
+User.update = function (userID, data, callback) {
+  dataToUpdate = app.get('helpers').hashToString(data);
+
+  var findUser = "MATCH (user {id:'" + userID + "'})\n";
+  var updateUser = 'SET user = { props } RETURN user;'
+  var query = findUser + updateUser;
+  
+  db.cypher({
+    query: query,
+    params: { "props": data }
+  }, function (error, results) {
+      var user;
+      if (!error) user = new User(results[0]['user']);
+      if (callback) callback(error, user);
+  });
+}
+
+User.updateOrCreate = function (userID, data, callback) {
+  User.find({ id: userID }, function (error, users) {
+    if (error) {
+      callback(error, []);
+    } else if (users.length > 0) {
+      User.update(userID, data, callback);
     } else {
       User.create(data, callback);
     }

@@ -33,7 +33,7 @@ UserLike.createLikes = function(userID, likes, callback) {
     return "MERGE (like" + userLike.id + ":" + dbModelName + " " + app.get('helpers').hashToString(data) + ")";
   }).join("\n") + "\n";
 
-  var createUserRelationships = "CREATE " + likes.map(function (userLike) {
+  var createUserRelationships = "MERGE " + likes.map(function (userLike) {
     return "(user)-[:" + dbRelationshipName + "]->(like" + userLike.id + "),";
   }).join("\n").slice(0, -1);
 
